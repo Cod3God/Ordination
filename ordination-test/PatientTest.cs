@@ -28,4 +28,23 @@ public class PatientTest
         Patient patient = new Patient(cpr, navn, vægt);
         Assert.AreEqual("Egon", patient.navn);
     }
+
+
+
+
+    //Mathias' test
+    [TestMethod]
+    public void MathiasVægt()
+    {
+        string cpr = "192939-3837";
+        string navn = "Mathias";
+        double vægt = 4000;
+
+        Patient patient = new Patient(cpr, navn, vægt);
+            Assert.AreEqual(4000, patient.vaegt);
+    }
+    
+
 }
+
+
