@@ -1,6 +1,7 @@
 namespace shared.Model;
 
 public class DagligSkæv : Ordination {
+
     public List<Dosis> doser { get; set; } = new List<Dosis>();
 
     public DagligSkæv(DateTime startDen, DateTime slutDen, Laegemiddel laegemiddel) : base(laegemiddel, startDen, slutDen) {
@@ -23,7 +24,13 @@ public class DagligSkæv : Ordination {
 
 	public override double doegnDosis() {
 		// TODO: Implement!
-        return -1;
+
+		double sum = 0; 
+		foreach (var item in doser)
+		{
+			sum += item.antal; 
+		}
+		return sum / base.antalDage(); 
 	}
 
 	public override String getType() {

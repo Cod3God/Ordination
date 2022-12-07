@@ -11,6 +11,12 @@ public class PN : Ordination {
     public PN() : base(null!, new DateTime(), new DateTime()) {
     }
 
+    /*
+    public PN(DateTime startDato, DateTime slutDato, double antal, int laegemiddelId, int patientId)
+    {
+    }
+    */ 
+
     /// <summary>
     /// Registrerer at der er givet en dosis på dagen givesDen
     /// Returnerer true hvis givesDen er inden for ordinationens gyldighedsperiode og datoen huskes
@@ -18,12 +24,21 @@ public class PN : Ordination {
     /// </summary>
     public bool givDosis(Dato givesDen) {
         // TODO: Implement!
+        if (givesDen.dato >= startDen && givesDen.dato <= slutDen)
+        {
+            dates.Add(givesDen);
+            return true;
+        }
         return false;
     }
 
+
     public override double doegnDosis() {
-    	// TODO: Implement!
-        return -1;
+        //(antal gange ordinationen er anvendt * antal enheder) / (antal dage mellem første og sidste givning)
+        // TODO: Implement!
+
+        //Bemærk, måske fejl ved at man kan give flere gange om dagen. 
+        return (samletDosis()) / (base.antalDage()); 
     }
 
 

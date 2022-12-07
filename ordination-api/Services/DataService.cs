@@ -4,6 +4,7 @@ using System.Text.Json;
 using shared.Model;
 using static shared.Util;
 using Data;
+using System.Reflection;
 
 namespace Service;
 
@@ -132,7 +133,13 @@ public class DataService
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
         // TODO: Implement!
-        return null!;
+
+        Laegemiddel laegemiddel = db.Laegemiddler.Find(laegemiddelId);
+        PN nyPN = new PN(startDato, slutDato, antal, laegemiddel);
+        db.Add(nyPN);
+        db.SaveChanges();
+
+        return nyPN;
     }
 
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
