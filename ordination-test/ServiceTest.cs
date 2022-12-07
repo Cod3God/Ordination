@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Service;
 using Data;
 using shared.Model;
+using static shared.Util;
 
 [TestClass]
 public class ServiceTest
@@ -40,6 +41,43 @@ public class ServiceTest
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
     }
+    [TestMethod]
+    public void OpretDagligSkæv()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        Assert.AreEqual(1, service.GetDagligSkæve().Count());
+
+        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
+            new Dosis[] {
+                new Dosis(CreateTimeOnly(12, 0, 0), 0.5),
+                new Dosis(CreateTimeOnly(12, 40, 0), 1),
+                new Dosis(CreateTimeOnly(16, 0, 0), 2.5),
+                new Dosis(CreateTimeOnly(18, 45, 0), 3)
+            }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(2, service.GetDagligSkæve().Count());
+    }
+    /*
+    [TestMethod]
+    public void OpretPN()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        Assert.AreEqual(1, service.GetDagligPN().Count());
+
+        service.OpretPN(patient.PatientId, lm.LaegemiddelId,
+            new Dosis[] {
+                new Dosis(CreateTimeOnly(12, 0, 0), 0.5),
+                new Dosis(CreateTimeOnly(12, 40, 0), 1),
+                new Dosis(CreateTimeOnly(16, 0, 0), 2.5),
+                new Dosis(CreateTimeOnly(18, 45, 0), 3)
+            }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(2, service.GetDagligPN().Count());
+    }*/
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
