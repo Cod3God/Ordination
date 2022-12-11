@@ -40,6 +40,7 @@ public class ServiceTest
             2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
+        //denne tester på om counten af listen dagligfast stiger med én efter der er givet en ny dosis.
     }
     [TestMethod]
     public void OpretDagligSkæv()
@@ -58,26 +59,32 @@ public class ServiceTest
             }, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligSkæve().Count());
+        //denne tester på om counten af listen dagligskæv stiger med én efter der er givet en ny dosis.
     }
-    /*
+   
     [TestMethod]
-    public void OpretPN()
+    public void OpretPN_Gyldig()
     {
-        Patient patient = service.GetPatienter().First();
-        Laegemiddel lm = service.GetLaegemidler().First();
+        //gyldig test
+        PN test1 = new PN(new DateTime(2022, 10, 12), new DateTime(2023, 04, 09), 73, new Laegemiddel("Fucidin", 1,2,3, "Styk"));
 
-        Assert.AreEqual(1, service.GetDagligPN().Count());
+        bool givDosis_test1 = test1.givDosis(new Dato { dato = new DateTime(2023, 01, 05).Date });
 
-        service.OpretPN(patient.PatientId, lm.LaegemiddelId,
-            new Dosis[] {
-                new Dosis(CreateTimeOnly(12, 0, 0), 0.5),
-                new Dosis(CreateTimeOnly(12, 40, 0), 1),
-                new Dosis(CreateTimeOnly(16, 0, 0), 2.5),
-                new Dosis(CreateTimeOnly(18, 45, 0), 3)
-            }, DateTime.Now, DateTime.Now.AddDays(3));
+        Assert.AreEqual(true, givDosis_test1);
+        //Starter med at indsætte en gyldighedsperiode for et givent lægemiddel samt antal enheder. Dernæst testes om værdien som er datoen for givDosis ligger indenfor gyldighedsperioden, da denne metode givDosis skal returnere true hvis den ligger indenfor denne. Til sidst testes om outputtet fra metoden givDosis som blev true er equal med true.
+    }
 
-        Assert.AreEqual(2, service.GetDagligPN().Count());
-    }*/
+    [TestMethod]
+    public void OpretPN_Ugyldig()
+    {
+        //ugyldig test
+        PN test1 = new PN(new DateTime(2022, 10, 12), new DateTime(2023, 04, 09), 73, new Laegemiddel("Fucidin", 1, 2, 3, "Styk"));
+
+        bool givDosis_test1 = test1.givDosis(new Dato { dato = new DateTime(2025, 01, 05).Date });
+
+        Assert.AreEqual(true, givDosis_test1);
+        //Starter med at indsætte en gyldighedsperiode for et givent lægemiddel samt antal enheder. Dernæst testes om værdien som er datoen for givDosis ligger indenfor gyldighedsperioden, da denne metode givDosis skal returnere true hvis den ligger indenfor denne. Til sidst testes om outputtet fra metoden givDosis som blev true er equal med true.
+    }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
