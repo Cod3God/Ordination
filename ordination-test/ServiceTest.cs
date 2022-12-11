@@ -37,7 +37,7 @@ public class ServiceTest
         Assert.AreEqual(1, service.GetDagligFaste().Count());
 
         service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
-            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+            -2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
         //denne tester på om counten af listen dagligfast stiger med én efter der er givet en ny dosis.
@@ -66,7 +66,7 @@ public class ServiceTest
     public void OpretPN_Gyldig()
     {
         //gyldig test
-        PN test1 = new PN(new DateTime(2022, 10, 12), new DateTime(2023, 04, 09), 73, new Laegemiddel("Fucidin", 1,2,3, "Styk"));
+        PN test1 = new PN(new DateTime(2022, 10, 12), new DateTime(2023, 04, 09), 73, new Laegemiddel("Methotrexat", 0.01, 0.015, 0.02, "Styk"));
 
         bool givDosis_test1 = test1.givDosis(new Dato { dato = new DateTime(2023, 01, 05).Date });
 
@@ -78,11 +78,11 @@ public class ServiceTest
     public void OpretPN_Ugyldig()
     {
         //ugyldig test
-        PN test1 = new PN(new DateTime(2022, 10, 12), new DateTime(2023, 04, 09), 73, new Laegemiddel("Fucidin", 1, 2, 3, "Styk"));
+        PN test2 = new PN(new DateTime(2022, 10, 12), new DateTime(2023, 04, 09), 73, new Laegemiddel("Methotrexat", 0.01, 0.015, 0.02, "Styk"));
 
-        bool givDosis_test1 = test1.givDosis(new Dato { dato = new DateTime(2025, 01, 05).Date });
+        bool givDosis_test2 = test2.givDosis(new Dato { dato = new DateTime(2025, 01, 05).Date });
 
-        Assert.AreEqual(true, givDosis_test1);
+        Assert.AreEqual(true, givDosis_test2);
         //Starter med at indsætte en gyldighedsperiode for et givent lægemiddel samt antal enheder. Dernæst testes om værdien som er datoen for givDosis ligger indenfor gyldighedsperioden, da denne metode givDosis skal returnere true hvis den ligger indenfor denne. Til sidst testes om outputtet fra metoden givDosis som blev true er equal med true.
     }
 
